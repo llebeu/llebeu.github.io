@@ -1,0 +1,83 @@
+---
+title: "디자인 시스템 구축하기"
+date: "2024-02-20"
+category: "디자인"
+tags: ["디자인시스템", "UI", "컴포넌트", "브랜딩"]
+excerpt: "일관성 있는 사용자 경험을 위한 디자인 시스템 구축 방법을 알아봅시다."
+---
+
+# 디자인 시스템 구축하기
+
+디자인 시스템은 일관성 있는 사용자 경험을 제공하기 위한 디자인 원칙과 컴포넌트의 집합입니다.
+
+## 디자인 토큰
+
+### 색상 시스템
+```css
+:root {
+  --color-primary-50: #eff6ff;
+  --color-primary-500: #3b82f6;
+  --color-primary-900: #1e3a8a;
+  
+  --color-gray-50: #f9fafb;
+  --color-gray-500: #6b7280;
+  --color-gray-900: #111827;
+}
+```
+
+### 타이포그래피
+```css
+.text-h1 {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.text-body {
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+```
+
+## 컴포넌트 라이브러리
+
+### 버튼 컴포넌트
+```tsx
+interface ButtonProps {
+  variant: 'primary' | 'secondary' | 'outline';
+  size: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+}
+
+export function Button({ variant, size, children }: ButtonProps) {
+  const baseClasses = 'font-medium rounded-lg transition-colors';
+  const variantClasses = {
+    primary: 'bg-blue-600 text-white hover:bg-blue-700',
+    secondary: 'bg-gray-200 text-gray-900 hover:bg-gray-300',
+    outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+  };
+  const sizeClasses = {
+    sm: 'px-3 py-1.5 text-sm',
+    md: 'px-4 py-2 text-base',
+    lg: 'px-6 py-3 text-lg'
+  };
+  
+  return (
+    <button className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]}`}>
+      {children}
+    </button>
+  );
+}
+```
+
+## 문서화
+
+디자인 시스템의 성공을 위해서는 명확한 문서화가 필수입니다:
+
+- 사용 가이드라인
+- 컴포넌트 API 문서
+- 디자인 원칙
+- 코드 예시
+
+체계적인 디자인 시스템을 구축하면 개발 효율성과 사용자 경험을 동시에 향상시킬 수 있습니다!

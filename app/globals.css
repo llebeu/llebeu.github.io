@@ -1,0 +1,176 @@
+@import "tailwindcss";
+
+@theme {
+  --color-background: 0 0% 90%;
+  --color-foreground: 0 0% 3.9%;
+  --color-card: 0 0% 90%;
+  --color-card-foreground: 0 0% 3.9%;
+  --color-popover: 0 0% 90%;
+  --color-popover-foreground: 0 0% 3.9%;
+  --color-primary: 0 0% 9%;
+  --color-primary-foreground: 0 0% 98%;
+  --color-secondary: 0 0% 96.1%;
+  --color-secondary-foreground: 0 0% 9%;
+  --color-muted: 0 0% 96.1%;
+  --color-muted-foreground: 0 0% 45.1%;
+  --color-accent: 0 0% 96.1%;
+  --color-accent-foreground: 0 0% 9%;
+  --color-destructive: 0 84.2% 60.2%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-border: 0 0% 89.8%;
+  --color-input: 0 0% 89.8%;
+  --color-ring: 0 0% 3.9%;
+  --color-radius: 0.5rem;
+  
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme dark {
+  --color-background: 0 0% 3.9%;
+  --color-foreground: 0 0% 98%;
+  --color-card: 0 0% 3.9%;
+  --color-card-foreground: 0 0% 98%;
+  --color-popover: 0 0% 3.9%;
+  --color-popover-foreground: 0 0% 98%;
+  --color-primary: 0 0% 98%;
+  --color-primary-foreground: 0 0% 9%;
+  --color-secondary: 0 0% 14.9%;
+  --color-secondary-foreground: 0 0% 98%;
+  --color-muted: 0 0% 14.9%;
+  --color-muted-foreground: 0 0% 63.9%;
+  --color-accent: 0 0% 14.9%;
+  --color-accent-foreground: 0 0% 98%;
+  --color-destructive: 0 62.8% 30.6%;
+  --color-destructive-foreground: 0 0% 98%;
+  --color-border: 0 0% 14.9%;
+  --color-input: 0 0% 14.9%;
+  --color-ring: 0 0% 83.1%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  }
+}
+
+/* VS Code 스타일 코드 블록 */
+.vscode-code-block {
+  @apply bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 font-mono text-sm;
+  border: 1px solid #3c3c3c;
+}
+
+.vscode-code-block code {
+  @apply bg-transparent p-0 text-sm font-mono;
+}
+
+/* 인라인 코드 */
+.vscode-inline-code {
+  @apply bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded text-sm font-mono;
+}
+
+/* VS Code 스타일 구문 강조 */
+pre {
+  @apply bg-gray-900 dark:bg-gray-800 text-gray-100 rounded-lg p-4 overflow-x-auto my-4 font-mono text-sm;
+  border: 1px solid #3c3c3c;
+}
+
+pre code {
+  @apply bg-transparent p-0 text-sm font-mono;
+}
+
+/* 기본 텍스트 색상 */
+pre {
+  color: #d4d4d4; /* VS Code 기본 텍스트 색상 */
+}
+
+/* 키워드 (import, export, function, const, return 등) */
+pre .keyword,
+pre .hljs-keyword,
+pre .token.keyword {
+  color: #569cd6 !important; /* VS Code 파란색 키워드 */
+}
+
+/* 문자열 */
+pre .string,
+pre .hljs-string,
+pre .token.string {
+  color: #ce9178 !important; /* VS Code 주황색 문자열 */
+}
+
+/* 숫자 */
+pre .number,
+pre .hljs-number,
+pre .token.number {
+  color: #b5cea8 !important; /* VS Code 연한 녹색 숫자 */
+}
+
+/* 함수/메서드 이름 */
+pre .function,
+pre .hljs-function,
+pre .token.function {
+  color: #dcdcaa !important; /* VS Code 노란색 함수 */
+}
+
+/* 주석 */
+pre .comment,
+pre .hljs-comment,
+pre .token.comment {
+  color: #6a9955 !important; /* VS Code 녹색 주석 */
+}
+
+/* 변수명 */
+pre .variable,
+pre .hljs-variable,
+pre .token.variable {
+  color: #9cdcfe !important; /* VS Code 밝은 파란색 변수 */
+}
+
+/* 연산자 */
+pre .operator,
+pre .hljs-operator,
+pre .token.operator {
+  color: #d4d4d4 !important; /* VS Code 기본 텍스트 색상 */
+}
+
+/* 클래스/타입 */
+pre .class,
+pre .hljs-class,
+pre .token.class,
+pre .type,
+pre .hljs-type,
+pre .token.type {
+  color: #4ec9b0 !important; /* VS Code 청록색 클래스/타입 */
+}
+
+/* 속성명 */
+pre .property,
+pre .hljs-property,
+pre .token.property {
+  color: #9cdcfe !important; /* VS Code 밝은 파란색 속성 */
+}
+
+/* JSX/HTML 태그 */
+pre .tag,
+pre .hljs-tag,
+pre .token.tag {
+  color: #569cd6 !important; /* VS Code 파란색 태그 */
+}
+
+/* JSX/HTML 속성 */
+pre .attr-name,
+pre .hljs-attr-name,
+pre .token.attr-name {
+  color: #9cdcfe !important; /* VS Code 밝은 파란색 속성명 */
+}
+
+/* JSX/HTML 속성값 */
+pre .attr-value,
+pre .hljs-attr-value,
+pre .token.attr-value {
+  color: #ce9178 !important; /* VS Code 주황색 속성값 */
+}

@@ -1,0 +1,59 @@
+---
+title: "Next.js 개발 팁"
+date: "2024-01-22"
+category: "개발"
+tags: ["Next.js", "React", "웹개발", "팁"]
+excerpt: "Next.js 개발 시 유용한 팁들을 정리했습니다."
+---
+
+# Next.js 개발 팁
+
+Next.js로 개발하면서 알게 된 유용한 팁들을 공유합니다.
+
+## 1. 동적 라우팅 활용
+
+동적 라우팅을 사용하여 유연한 페이지 구조를 만들 수 있습니다.
+
+```jsx
+// pages/posts/[slug].js
+export default function Post({ post }) {
+  return (
+    <article>
+      <h1>{post.title}</h1>
+      <div>{post.content}</div>
+    </article>
+  );
+}
+
+export async function getStaticPaths() {
+  // 모든 가능한 경로를 미리 생성
+  return {
+    paths: [{ params: { slug: 'hello-world' } }],
+    fallback: false,
+  };
+}
+```
+
+## 2. 이미지 최적화
+
+Next.js의 Image 컴포넌트를 사용하여 자동으로 이미지를 최적화할 수 있습니다.
+
+```jsx
+import Image from 'next/image';
+
+function OptimizedImage() {
+  return (
+    <Image
+      src="/hero.jpg"
+      alt="Hero Image"
+      width={800}
+      height={600}
+      priority
+      placeholder="blur"
+      blurDataURL="data:image/jpeg;base64,..."
+    />
+  );
+}
+```
+
+이러한 팁들을 활용하면 더욱 효율적인 Next.js 개발이 가능합니다!

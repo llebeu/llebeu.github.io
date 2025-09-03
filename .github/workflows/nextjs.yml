@@ -1,0 +1,82 @@
+name: Deploy Next.js (export) to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]         # main 브랜치 푸시마다 배포
+  workflow_dispatch:              # 수동 실행 버튼
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"     # 사용 Node 버전(LTS도 OK)
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
+
+      # Next.js 정적 내보내기 빌드
+      - name: Build (Next.js Static Export)
+        env:
+          NEXT_PUBLIC_PORTFOLIO_PASSWORD: ${{ secrets.PORTFOLIO_PASSWORD }}
+        run: |
+          pnpm build
+          echo "Build completed successfully"
+          echo "Checking for static export..."
+          if [ -d "out" ]; then
+            echo "✅ Static export successful - out directory found"
+            ls -la out/
+          else
+            echo "❌ Static export failed - out directory not found"
+            echo "Trying to force static export..."
+            pnpm build:export
+            if [ -d "out" ]; then
+              echo "✅ Static export successful after retry"
+            else
+              echo "❌ Static export still failed"
+              exit 1
+            fi
+          fi
+
+      - name: Debug build output
+        run: |
+          echo "Current directory: $(pwd)"
+          echo "Directory contents:"
+          ls -la
+          echo "out directory contents (if exists):"
+          ls -la out/ || echo "out directory does not exist"
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: out              # 정적 산출물 디렉토리
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,65 @@
+---
+title: "TypeScript 실무 팁"
+date: "2024-01-18"
+category: "개발"
+tags: ["TypeScript", "타입안전성", "개발팁", "프론트엔드"]
+excerpt: "TypeScript를 더 효과적으로 사용하는 실무 팁들을 공유합니다."
+---
+
+# TypeScript 실무 팁
+
+TypeScript를 사용하면서 알게 된 유용한 팁들을 정리했습니다.
+
+## 1. 유니온 타입 활용
+
+여러 타입을 조합하여 더 유연한 타입을 만들 수 있습니다.
+
+```typescript
+type Status = 'loading' | 'success' | 'error';
+
+function handleStatus(status: Status) {
+  switch (status) {
+    case 'loading':
+      return '로딩 중...';
+    case 'success':
+      return '성공!';
+    case 'error':
+      return '오류 발생';
+  }
+}
+```
+
+## 2. 제네릭 활용
+
+재사용 가능한 타입을 만들 수 있습니다.
+
+```typescript
+interface ApiResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+}
+
+function fetchData<T>(url: string): Promise<ApiResponse<T>> {
+  return fetch(url).then(res => res.json());
+}
+```
+
+## 3. 타입 가드 활용
+
+런타임에 타입을 확인할 수 있습니다.
+
+```typescript
+function isString(value: unknown): value is string {
+  return typeof value === 'string';
+}
+
+function processValue(value: unknown) {
+  if (isString(value)) {
+    // 여기서 value는 string 타입으로 추론됨
+    console.log(value.toUpperCase());
+  }
+}
+```
+
+TypeScript의 강력한 타입 시스템을 활용하면 더 안전하고 유지보수하기 쉬운 코드를 작성할 수 있습니다!

@@ -1,0 +1,61 @@
+---
+title: "JavaScript ES2024 새로운 기능들"
+date: "2024-01-15"
+category: "개발"
+tags: ["JavaScript", "ES2024", "최신기능", "프론트엔드"]
+excerpt: "JavaScript ES2024에서 추가된 새로운 기능들을 살펴봅니다."
+---
+
+# JavaScript ES2024 새로운 기능들
+
+JavaScript는 계속해서 발전하고 있으며, ES2024에서도 흥미로운 기능들이 추가되었습니다.
+
+## 1. Array Grouping
+
+배열을 그룹화하는 새로운 메서드입니다.
+
+```javascript
+const items = [
+  { name: 'Apple', category: 'fruit' },
+  { name: 'Carrot', category: 'vegetable' },
+  { name: 'Banana', category: 'fruit' }
+];
+
+const grouped = Object.groupBy(items, item => item.category);
+// 결과: { fruit: [...], vegetable: [...] }
+```
+
+## 2. Promise.withResolvers
+
+Promise를 더 유연하게 사용할 수 있게 해줍니다.
+
+```javascript
+const { promise, resolve, reject } = Promise.withResolvers();
+
+setTimeout(() => resolve('완료!'), 1000);
+```
+
+## 3. Temporal API
+
+날짜와 시간을 다루는 새로운 표준 API입니다.
+
+```javascript
+const now = Temporal.Now.instant();
+const date = now.toZonedDateTimeISO('Asia/Seoul');
+```
+
+## 4. Decorators
+
+클래스와 클래스 멤버에 메타데이터를 추가할 수 있습니다.
+
+```javascript
+@readonly
+class Example {
+  @log
+  method() {
+    return 'Hello';
+  }
+}
+```
+
+이러한 새로운 기능들을 활용하면 더욱 강력하고 표현력 있는 코드를 작성할 수 있습니다!

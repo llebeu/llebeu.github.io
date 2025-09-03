@@ -1,0 +1,53 @@
+---
+title: "CSS Grid 레이아웃 마스터하기"
+date: "2024-02-01"
+category: "디자인"
+tags: ["CSS", "Grid", "레이아웃", "웹디자인"]
+excerpt: "CSS Grid를 사용하여 복잡한 레이아웃을 쉽게 구현하는 방법을 배워봅시다."
+---
+
+# CSS Grid 레이아웃 마스터하기
+
+CSS Grid는 2차원 레이아웃을 만들기 위한 강력한 도구입니다.
+
+## 기본 Grid 설정
+
+```css
+.container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: auto;
+  gap: 20px;
+}
+```
+
+## Grid Areas 활용
+
+```css
+.layout {
+  display: grid;
+  grid-template-areas:
+    "header header header"
+    "sidebar main main"
+    "footer footer footer";
+  grid-template-columns: 200px 1fr 1fr;
+  grid-template-rows: auto 1fr auto;
+}
+
+.header { grid-area: header; }
+.sidebar { grid-area: sidebar; }
+.main { grid-area: main; }
+.footer { grid-area: footer; }
+```
+
+## 반응형 Grid
+
+```css
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+```
+
+CSS Grid를 마스터하면 복잡한 레이아웃도 쉽게 구현할 수 있습니다!
