@@ -1,8 +1,8 @@
-import { getAllPosts } from "@/lib/posts"
-import PostCard from "@/components/PostCard"
+import { getAllPostsServer } from "@/lib/posts";
+import PostCard from "@/components/PostCard";
 
-export default function PostsPage() {
-  const posts = getAllPosts()
+export default async function PostsPage() {
+  const posts = await getAllPostsServer();
 
   return (
     <div className="container mx-auto px-6 py-8">
@@ -25,5 +25,5 @@ export default function PostsPage() {
         </div>
       )}
     </div>
-  )
+  );
 }

@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { useTheme } from "next-themes"
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import Link from "next/link";
+import { useTheme } from "next-themes";
+import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function Header() {
-  const { theme, setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme, resolvedTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(resolvedTheme === "dark" ? "light" : "dark")
-  }
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  };
 
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -19,14 +19,29 @@ export default function Header() {
           ILLebeu's blog
         </Link>
         <nav className="flex items-center space-x-6">
-          <Link href="/" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link
+            href="/"
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
             Home
           </Link>
-          <Link href="/posts" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link
+            href="/posts"
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
             Posts
           </Link>
-          <Link href="/portfolio" className="text-sm font-medium hover:text-primary transition-colors">
+          <Link
+            href="/portfolio"
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
             Portfolio
+          </Link>
+          <Link
+            href="/admin"
+            className="text-sm font-medium hover:text-primary transition-colors"
+          >
+            Admin
           </Link>
           <Button
             variant="ghost"
@@ -41,5 +56,5 @@ export default function Header() {
         </nav>
       </div>
     </header>
-  )
+  );
 }

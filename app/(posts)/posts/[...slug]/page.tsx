@@ -1,29 +1,29 @@
-import { notFound } from "next/navigation"
-import Link from "next/link"
-import { Badge } from "@/components/ui/badge"
-import { getAllPosts, getPostBySlug } from "@/lib/posts"
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { getAllPostsServer, getPostBySlugServer } from "@/lib/posts";
 
 interface PostPageProps {
-  params: Promise<{ slug: string[] }>
+  params: Promise<{ slug: string[] }>;
 }
 
 export async function generateStaticParams() {
-  const posts = getAllPosts()
-  
+  const posts = await getAllPostsServer();
+
   // catch-all 라우트를 위해 slug를 배열로 분할
   return posts.map((post) => ({
-    slug: post.slug.split('/'),
-  }))
+    slug: post.slug.split("/"),
+  }));
 }
 
 export default async function PostPage({ params }: PostPageProps) {
-  const { slug } = await params
+  const { slug } = await params;
   // slug 배열을 문자열로 결합
-  const slugString = slug.join('/')
-  const post = await getPostBySlug(slugString)
+  const slugString = slug.join("/");
+  const post = await getPostBySlugServer(slugString);
 
   if (!post) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -40,7 +40,12 @@ export default async function PostPage({ params }: PostPageProps) {
               })}
             </time>
             {post.meta.category && (
-              <Link href={`/posts?category=${encodeURIComponent(post.meta.category)}`} className="hover:text-primary">
+              <Link
+                href={`/posts?category=${encodeURIComponent(
+                  post.meta.category
+                )}`}
+                className="hover:text-primary"
+              >
                 {post.meta.category}
               </Link>
             )}
@@ -56,7 +61,7 @@ export default async function PostPage({ params }: PostPageProps) {
           )}
         </header>
 
-        <div 
+        <div
           className="
             max-w-none
             prose-headings:font-semibold prose-headings:tracking-tight
@@ -91,5 +96,5 @@ export default async function PostPage({ params }: PostPageProps) {
         </Link>
       </nav>
     </div>
-  )
+  );
 }
