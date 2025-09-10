@@ -2,8 +2,9 @@ import {
   supabase,
   createServerSupabaseClient,
   supabaseAdmin,
-  Database,
 } from "./supabase";
+import type { Database } from "@/lib/supabase";
+import type { PostRow, PostInsert, PostUpdate, PostMeta, Post } from "@/types/posts";
 import { unified } from "unified";
 import remarkParse from "remark-parse";
 import remarkGfm from "remark-gfm";
@@ -11,28 +12,7 @@ import remarkRehype from "remark-rehype";
 import rehypeHighlight from "rehype-highlight";
 import rehypeStringify from "rehype-stringify";
 
-// Supabase에서 가져온 타입 사용
-export type PostRow = Database["public"]["Tables"]["posts"]["Row"];
-export type PostInsert = Database["public"]["Tables"]["posts"]["Insert"];
-export type PostUpdate = Database["public"]["Tables"]["posts"]["Update"];
-
-// 기존 인터페이스와 호환성을 위한 타입
-export interface PostMeta {
-  id: string;
-  slug: string;
-  title: string;
-  date: string;
-  category: string;
-  tags: string[];
-  excerpt: string;
-  cover?: string;
-  published: boolean;
-}
-
-export interface Post {
-  meta: PostMeta;
-  content: string;
-}
+// 타입은 lib/types/posts.ts에서 가져옵니다
 
 // Supabase에서 모든 게시된 포스트 가져오기 (클라이언트 사이드)
 export async function getAllPosts(): Promise<PostMeta[]> {
@@ -47,8 +27,10 @@ export async function getAllPosts(): Promise<PostMeta[]> {
       console.error("포스트를 가져오는 중 오류 발생:", error);
       return [];
     }
+    if (!data) return [];
 
-    return data.map((post) => ({
+    const rows = (data ?? []) as PostRow[];
+    return rows.map((post) => ({
       id: post.id,
       slug: post.slug,
       title: post.title,
@@ -79,8 +61,10 @@ export async function getAllPostsServer(): Promise<PostMeta[]> {
       console.error("포스트를 가져오는 중 오류 발생:", error);
       return [];
     }
+    if (!data) return [];
 
-    return data.map((post) => ({
+    const rows = (data ?? []) as PostRow[];
+    return rows.map((post) => ({
       id: post.id,
       slug: post.slug,
       title: post.title,
@@ -112,6 +96,8 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       return null;
     }
 
+    const row = data as PostRow;
+
     // 마크다운을 HTML로 변환
     const processedContent = await unified()
       .use(remarkParse)
@@ -119,21 +105,20 @@ export async function getPostBySlug(slug: string): Promise<Post | null> {
       .use(remarkRehype)
       .use(rehypeHighlight)
       .use(rehypeStringify)
-      .process(data.content);
+      .process(row.content);
 
     const htmlContent = processedContent.toString();
-
     return {
       meta: {
-        id: data.id,
-        slug: data.slug,
-        title: data.title,
-        date: data.created_at.split("T")[0],
-        category: data.category,
-        tags: data.tags,
-        excerpt: data.excerpt,
-        cover: data.cover,
-        published: data.published,
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        date: row.created_at.split("T")[0],
+        category: row.category,
+        tags: row.tags,
+        excerpt: row.excerpt,
+        cover: row.cover,
+        published: row.published,
       },
       content: htmlContent,
     };
@@ -159,6 +144,8 @@ export async function getPostBySlugServer(slug: string): Promise<Post | null> {
       return null;
     }
 
+    const row = data as PostRow;
+
     // 마크다운을 HTML로 변환
     const processedContent = await unified()
       .use(remarkParse)
@@ -166,21 +153,20 @@ export async function getPostBySlugServer(slug: string): Promise<Post | null> {
       .use(remarkRehype)
       .use(rehypeHighlight)
       .use(rehypeStringify)
-      .process(data.content);
+      .process(row.content);
 
     const htmlContent = processedContent.toString();
-
     return {
       meta: {
-        id: data.id,
-        slug: data.slug,
-        title: data.title,
-        date: data.created_at.split("T")[0],
-        category: data.category,
-        tags: data.tags,
-        excerpt: data.excerpt,
-        cover: data.cover,
-        published: data.published,
+        id: row.id,
+        slug: row.slug,
+        title: row.title,
+        date: row.created_at.split("T")[0],
+        category: row.category,
+        tags: row.tags,
+        excerpt: row.excerpt,
+        cover: row.cover,
+        published: row.published,
       },
       content: htmlContent,
     };
@@ -206,8 +192,10 @@ export async function getPostsByCategory(
       console.error("카테고리별 포스트를 가져오는 중 오류 발생:", error);
       return [];
     }
+    if (!data) return [];
 
-    return data.map((post) => ({
+    const rows = (data ?? []) as PostRow[];
+    return rows.map((post) => ({
       id: post.id,
       slug: post.slug,
       title: post.title,
@@ -237,7 +225,7 @@ export async function getCategories(): Promise<string[]> {
       return [];
     }
 
-    const categories = data.map((post) => post.category);
+    const categories = (data as Pick<PostRow, "category">[]).map((post) => post.category);
     return Array.from(new Set(categories));
   } catch (error) {
     console.error("카테고리를 가져오는 중 오류 발생:", error);
@@ -262,9 +250,9 @@ export async function createPost(
   postData: PostInsert
 ): Promise<PostRow | null> {
   try {
-    const { data, error } = await supabaseAdmin
+    const { data, error } = await (supabaseAdmin as any)
       .from("posts")
-      .insert(postData)
+      .insert([postData as PostInsert])
       .select()
       .single();
 
@@ -286,9 +274,14 @@ export async function updatePost(
   postData: PostUpdate
 ): Promise<PostRow | null> {
   try {
-    const { data, error } = await supabaseAdmin
+    const payload: PostUpdate = {
+      ...postData,
+      updated_at: new Date().toISOString(),
+    };
+
+    const { data, error } = await (supabaseAdmin as any)
       .from("posts")
-      .update({ ...postData, updated_at: new Date().toISOString() })
+      .update([payload])
       .eq("id", id)
       .select()
       .single();
@@ -328,14 +321,16 @@ export async function getAllPostsAdmin(): Promise<PostMeta[]> {
     const { data, error } = await supabaseAdmin
       .from("posts")
       .select("*")
+      .returns<PostRow[]>()
       .order("created_at", { ascending: false });
 
     if (error) {
       console.error("관리자용 포스트를 가져오는 중 오류 발생:", error);
       return [];
     }
+    if (!data) return [];
 
-    return data.map((post) => ({
+    return data.map((post: PostRow) => ({
       id: post.id,
       slug: post.slug,
       title: post.title,

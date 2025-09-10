@@ -6,6 +6,7 @@ import Header from "@/components/Header"
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css"
 import { Suspense } from "react"
+import { QueryProvider } from "@/components/QueryProvider"
 
 export const metadata: Metadata = {
   title: "My Blog",
@@ -30,10 +31,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Suspense fallback={<div>Loading...</div>}>
-            <Header />
-            {children}
-          </Suspense>
+          <QueryProvider>
+            <Suspense fallback={<div>Loading...</div>}>
+              <Header />
+              {children}
+            </Suspense>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>
